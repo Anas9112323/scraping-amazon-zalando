@@ -1,0 +1,12 @@
+# Session 2 — lancer : docker compose up --build
+# Volumes : le dossier du projet sur le Mac est monté dans /app (modifs visibles sans rebuild).
+
+services:
+  app:
+    build: .
+    image: cours-scraping-session2:latest
+    container_name: session2_app
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: ["python", "main.py"]

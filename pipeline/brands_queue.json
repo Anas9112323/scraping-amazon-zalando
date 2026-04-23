@@ -1,0 +1,264 @@
+{
+  "brands": [
+    {
+      "name": "Geographical Norway",
+      "mot_cle": "geographical norway softshell",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Naf Naf",
+      "mot_cle": "naf naf robe femme",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Celio",
+      "mot_cle": "celio jeans homme",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Chevignon",
+      "mot_cle": "chevignon blouson cuir",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Eric Bompard",
+      "mot_cle": "eric bompard cachemire",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Kookaï",
+      "mot_cle": "kookai robe femme",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Jennyfer",
+      "mot_cle": "jennyfer femme",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Pimkie",
+      "mot_cle": "pimkie femme",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Promod",
+      "mot_cle": "promod femme",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Cache Cache",
+      "mot_cle": "cache cache femme",
+      "status": "done",
+      "last_scan": "2026-04-22 17:48:30"
+    },
+    {
+      "name": "Bonobo",
+      "mot_cle": "bonobo jeans",
+      "status": "pending"
+    },
+    {
+      "name": "Grain de Malice",
+      "mot_cle": "grain de malice femme",
+      "status": "pending"
+    },
+    {
+      "name": "Bleu Bonheur",
+      "mot_cle": "bleu bonheur femme",
+      "status": "pending"
+    },
+    {
+      "name": "Balibaris",
+      "mot_cle": "balibaris homme",
+      "status": "pending"
+    },
+    {
+      "name": "Brice",
+      "mot_cle": "brice homme",
+      "status": "pending"
+    },
+    {
+      "name": "Jules",
+      "mot_cle": "jules homme vetements",
+      "status": "pending"
+    },
+    {
+      "name": "Kiabi",
+      "mot_cle": "kiabi femme",
+      "status": "pending"
+    },
+    {
+      "name": "La Redoute",
+      "mot_cle": "la redoute femme",
+      "status": "pending"
+    },
+    {
+      "name": "Sessùn",
+      "mot_cle": "sessun femme",
+      "status": "pending"
+    },
+    {
+      "name": "Soeur",
+      "mot_cle": "soeur paris vetements",
+      "status": "pending"
+    },
+    {
+      "name": "Rouje",
+      "mot_cle": "rouje robe",
+      "status": "pending"
+    },
+    {
+      "name": "Musier Paris",
+      "mot_cle": "musier paris",
+      "status": "pending"
+    },
+    {
+      "name": "Maison Kitsuné",
+      "mot_cle": "maison kitsune",
+      "status": "pending"
+    },
+    {
+      "name": "Courrèges",
+      "mot_cle": "courreges",
+      "status": "pending"
+    },
+    {
+      "name": "Ami Paris",
+      "mot_cle": "ami paris vetements",
+      "status": "pending"
+    },
+    {
+      "name": "A.P.C.",
+      "mot_cle": "apc paris vetements",
+      "status": "pending"
+    },
+    {
+      "name": "Maje",
+      "mot_cle": "maje robe femme",
+      "status": "pending"
+    },
+    {
+      "name": "Sandro",
+      "mot_cle": "sandro homme",
+      "status": "pending"
+    },
+    {
+      "name": "Claudie Pierlot",
+      "mot_cle": "claudie pierlot",
+      "status": "pending"
+    },
+    {
+      "name": "The Kooples",
+      "mot_cle": "the kooples homme",
+      "status": "pending"
+    },
+    {
+      "name": "Zadig & Voltaire",
+      "mot_cle": "zadig voltaire",
+      "status": "pending"
+    },
+    {
+      "name": "Ba&sh",
+      "mot_cle": "bash vetements femme",
+      "status": "pending"
+    },
+    {
+      "name": "Vanessa Bruno",
+      "mot_cle": "vanessa bruno",
+      "status": "pending"
+    },
+    {
+      "name": "Comptoir des Cotonniers",
+      "mot_cle": "comptoir des cotonniers",
+      "status": "pending"
+    },
+    {
+      "name": "Gerard Darel",
+      "mot_cle": "gerard darel",
+      "status": "pending"
+    },
+    {
+      "name": "Sinéquanone",
+      "mot_cle": "sinequanone robe",
+      "status": "pending"
+    },
+    {
+      "name": "1083",
+      "mot_cle": "1083 jeans",
+      "status": "pending"
+    },
+    {
+      "name": "Le Slip Français",
+      "mot_cle": "le slip francais",
+      "status": "pending"
+    },
+    {
+      "name": "Ekyog",
+      "mot_cle": "ekyog femme",
+      "status": "pending"
+    },
+    {
+      "name": "Valentine Gauthier",
+      "mot_cle": "valentine gauthier",
+      "status": "pending"
+    },
+    {
+      "name": "Tartine et Chocolat",
+      "mot_cle": "tartine et chocolat enfant",
+      "status": "pending"
+    },
+    {
+      "name": "Catimini",
+      "mot_cle": "catimini enfant",
+      "status": "pending"
+    },
+    {
+      "name": "Bonpoint",
+      "mot_cle": "bonpoint enfant",
+      "status": "pending"
+    },
+    {
+      "name": "Dim",
+      "mot_cle": "dim sous vetements",
+      "status": "pending"
+    },
+    {
+      "name": "Eminence",
+      "mot_cle": "eminence sous vetements homme",
+      "status": "pending"
+    },
+    {
+      "name": "Eres",
+      "mot_cle": "eres maillot bain",
+      "status": "pending"
+    },
+    {
+      "name": "Pain de Sucre",
+      "mot_cle": "pain de sucre maillot",
+      "status": "pending"
+    },
+    {
+      "name": "Salsa Jeans",
+      "mot_cle": "salsa jeans femme",
+      "status": "pending"
+    },
+    {
+      "name": "Serge Blanco",
+      "mot_cle": "serge blanco polo",
+      "status": "pending"
+    },
+    {
+      "name": "Schott NYC",
+      "mot_cle": "schott blouson cuir",
+      "status": "pending"
+    }
+  ]
+}

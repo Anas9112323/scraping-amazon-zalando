@@ -1,17 +1,26 @@
-# Credentials & secrets — NE JAMAIS COMMIT
+# Credentials & secrets
 google_creds.json
 *.json.bak
 .env
 pipeline/.env
 
 # Data files (générés par le pipeline)
-data/*.csv
-data/*.xlsx
-data/*.png
+data/
+*.csv
+*.xlsx
+*.png
 
 # Logs
 pipeline/logs/
 *.log
+
+# Cours / autres sessions (pas lié au pipeline)
+session_2/
+src/
+scripts/
+logs/
+run.py
+/requirements.txt
 
 # Python
 __pycache__/
@@ -23,11 +32,8 @@ venv/
 
 # macOS
 .DS_Store
-.AppleDouble
-.LSOverride
 
 # IDE
 .vscode/
 .idea/
 *.swp
-*.swo

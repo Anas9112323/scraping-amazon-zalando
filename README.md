@@ -1,57 +1,86 @@
-# Pipeline Scraping — Marques FR : Amazon vs Zalando
+# Cours — Scraping + Pipeline (Python)
 
-Pipeline automatisé qui identifie les marques françaises de vêtements présentes sur **Amazon.fr** mais **absentes de Zalando.fr**, pour les rediriger vers Zalando via **Mirakl**.
-
----
-
-## Objectif business
-
-> Trouver des **leads** : marques qui vendent sur Amazon.fr mais ne sont pas (encore) sur Zalando.fr → leur proposer de s'y inscrire via Mirakl.
-
-**Critère LEAD :**
-- Amazon.fr = **OUI** (produits neufs en vente)
-- Zalando.fr = **NON** (absent ou seconde main uniquement)
+Projet de scraping web avec Python : extraction de données, parsing HTML, export CSV, scheduling automatique (cron), et notifications Slack.
 
 ---
 
-## Architecture du pipeline
+## Contenu du projet
 
-```
-pipeline/
-├── run_batch.py          # Script principal — batch quotidien (10 marques/jour)
-├── checker.py            # Moteur de vérification Amazon.fr + Zalando.fr
-├── sheets.py             # Export automatique vers Google Sheets
-├── config.py             # Configuration (paths, batch size, credentials)
-├── seed_data.py          # Données seed vérifiées (15 marques)
-├── brands_queue.json     # File d'attente des marques à scanner (50 marques FR)
-├── cron_pipeline.sh      # Script bash exécuté par le cron job
-├── export_excel.py       # Export Excel formaté (.xlsx) avec couleurs
-├── setup_gsheet.py       # Setup one-time Google Sheets
-├── requirements.txt      # Dépendances Python
-└── .env.example          # Template de configuration
+### 1. Pipeline Quotes (démo)
+Scraping de [quotes.toscrape.com](https://quotes.toscrape.com/) — extraction de citations.
+
+```bash
+python run.py
 ```
 
+### 2. Pipeline Books to Scrape
+Scraping complet de [books.toscrape.com](https://books.toscrape.com/) — catalogue de 1000 livres avec pagination, détail produit, analyse par catégorie.
+
+```bash
+python -c "
+from src.logging_setup import setup_logging
+from src.config import LOG_DIR
+from src.books_pipeline import run_books_scrape
+setup_logging(LOG_DIR)
+run_books_scrape(max_pages=3, max_books=20)
+"
+```
+
+### 3. Pipeline Amazon vs Zalando (business)
+Identification de marques FR présentes sur Amazon.fr mais absentes de Zalando.fr → leads pour redirection Mirakl.
+
+```bash
+python pipeline/run_batch.py
+```
+
+### 4. Scheduling (cron / launchd)
+Automatisation quotidienne des scrapes via cron job et Docker.
+
 ---
 
-## Données collectées
+## Structure
 
-| Colonne | Description |
-|---------|-------------|
-| `Brand` | Nom de la marque |
-| `Mot-clé` | Mot-clé de recherche Amazon |
-| `Amazon présent` | Oui/Non — présence produits neufs sur Amazon.fr |
-| `Amazon détail` | Détails (nb résultats, boutique officielle, % positif) |
-| `Amazon note` | Note moyenne (ex: 4.2/5) |
-| `Amazon avis` | Nombre d'avis estimé |
-| `Amazon prix` | Fourchette de prix en € |
-| `Zalando présent (neuf)` | Oui/Non — présence catalogue neuf sur Zalando.fr |
-| `Zalando type` | `officiel` / `seconde_main` / `absent` / `probable` |
-| `Zalando détail` | Détails (nb articles, type de présence) |
-| `Site web` | URL du site officiel de la marque |
-| `Page contact` | URL page contact / commercial |
-| `Page RGPD` | URL mentions légales / CGV |
-| `LEAD` | **OUI** = cible commerciale / **NON** = déjà sur les 2 |
-| `Date scan` | Date du dernier scan |
+```
+├── src/                        # Code source principal
+│   ├── config.py               # URLs, délais, chemins
+│   ├── fetch.py                # HTTP client + retry
+│   ├── parse.py                # Parser quotes.toscrape
+│   ├── parse_books.py          # Parser books.toscrape (fiches + pagination)
+│   ├── pipeline.py             # Pipeline quotes → CSV
+│   ├── books_pipeline.py       # Pipeline books → CSV + Slack
+│   ├── analyze_books.py        # Analyse : stats par catégorie, top rated
+│   ├── logging_setup.py        # Logging rotatif fichier + console
+│   └── notify_slack.py         # Notification Slack (webhook)
+│
+├── pipeline/                   # Pipeline Amazon vs Zalando
+│   ├── run_batch.py            # Batch quotidien (10 marques/jour)
+│   ├── checker.py              # Check Amazon.fr + Zalando.fr
+│   ├── sheets.py               # Export Google Sheets
+│   ├── export_excel.py         # Export Excel formaté
+│   ├── seed_data.py            # Données seed vérifiées
+│   ├── brands_queue.json       # File d'attente (50 marques FR)
+│   ├── config.py               # Config pipeline
+│   ├── cron_pipeline.sh        # Script cron
+│   ├── setup_gsheet.py         # Setup Google Sheets
+│   └── .env.example            # Template config
+│
+├── scripts/                    # Scripts utilitaires
+│   └── cron_scrape_3h.sh       # Cron books à 3h du mat
+│
+├── session_2/                  # Session 2 : Docker + cron
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── crontab.sh
+│   └── ...
+│
+├── data/
+│   ├── raw/                    # HTML brut (debug)
+│   └── processed/              # CSV générés
+│
+├── logs/                       # Logs d'exécution
+├── run.py                      # Point d'entrée quotes
+└── requirements.txt            # Dépendances Python
+```
 
 ---
 
@@ -61,131 +90,14 @@ pipeline/
 git clone https://github.com/Anas9112323/scraping-amazon-zalando.git
 cd scraping-amazon-zalando
 
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Pour le pipeline Amazon/Zalando :
+```bash
 pip install -r pipeline/requirements.txt
-
-cp pipeline/.env.example pipeline/.env
-# Éditer pipeline/.env avec ta clé SerpAPI (optionnel mais recommandé)
-```
-
----
-
-## Usage
-
-### Lancer un batch manuellement
-
-```bash
-# Batch normal (10 marques)
-python3 pipeline/run_batch.py
-
-# Traiter TOUTES les marques d'un coup
-python3 pipeline/run_batch.py --all
-
-# Remettre toutes les marques en attente
-python3 pipeline/run_batch.py --reset
-```
-
-### Exporter les données
-
-```bash
-# Export Excel formaté (s'ouvre automatiquement)
-python3 pipeline/export_excel.py
-
-# Injecter les données seed (première fois)
-python3 pipeline/seed_data.py
-```
-
-### Google Sheets (auto-sync)
-
-```bash
-# Setup one-time (après avoir configuré les credentials)
-python3 pipeline/setup_gsheet.py
-```
-
----
-
-## Cron job — Exécution quotidienne à 8h
-
-### macOS (launchd)
-
-```bash
-launchctl load ~/Library/LaunchAgents/com.scraping.pipeline.plist
-
-# Vérifier
-launchctl list | grep scraping
-
-# Désactiver
-launchctl unload ~/Library/LaunchAgents/com.scraping.pipeline.plist
-```
-
-### Linux (crontab)
-
-```bash
-crontab -e
-# Ajouter :
-0 8 * * * /chemin/vers/pipeline/cron_pipeline.sh
-```
-
-> **Note :** Adapter les paths dans `cron_pipeline.sh` et le fichier `.plist` à votre machine.
-
----
-
-## Configuration
-
-### SerpAPI (recommandé)
-
-Sans SerpAPI, le pipeline fonctionne en mode dégradé (Amazon partiellement OK, Zalando souvent bloqué 403).
-
-1. Crée un compte gratuit sur [serpapi.com](https://serpapi.com/) (100 recherches/mois)
-2. Ajoute dans `pipeline/.env` :
-
-```
-SERPAPI_KEY=ta_cle_api_ici
-```
-
-### Google Sheets (partage automatique)
-
-1. Va sur [Google Cloud Console](https://console.cloud.google.com/)
-2. Crée un projet → active **Google Sheets API** + **Google Drive API**
-3. Crée un **Service Account** → télécharge la clé JSON
-4. Place le fichier dans `pipeline/google_creds.json`
-5. Lance `python3 pipeline/setup_gsheet.py`
-
----
-
-## Résultats du POC
-
-### 5 LEADS identifiés
-
-| Marque | Amazon | Zalando | Statut |
-|--------|--------|---------|--------|
-| Geographical Norway | Boutique officielle, 1K+ clients | Absent | **LEAD** |
-| Naf Naf | Robes, manteaux, 1000+ résultats | Seconde main uniquement | **LEAD** |
-| Celio | Jeans, basiques | Seconde main uniquement | **LEAD** |
-| Chevignon | Blousons cuir, 111+ résultats | Seconde main uniquement | **LEAD** |
-| Eric Bompard | Écharpes cachemire | Absent | **LEAD** |
-
-### 10 marques déjà sur les 2 plateformes
-
-Petit Bateau, Aigle, Lacoste, Armor Lux, Kaporal, Oxbow, Le Coq Sportif, Le Slip Français, Veja, Aubade
-
-### 40 marques restantes dans la queue
-
-À traiter par le batch quotidien (10/jour → 4 jours pour tout couvrir).
-
----
-
-## Workflow quotidien
-
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────────┐
-│  Cron 8h    │────▶│  run_batch   │────▶│  checker.py     │
-│  (launchd)  │     │  (10 marques)│     │  Amazon+Zalando │
-└─────────────┘     └──────┬───────┘     └────────┬────────┘
-                           │                       │
-                    ┌──────▼───────┐        ┌──────▼────────┐
-                    │  CSV master  │        │  Google Sheet │
-                    │  + Excel     │        │  (auto-sync)  │
-                    └──────────────┘        └───────────────┘
 ```
 
 ---
@@ -194,9 +106,45 @@ Petit Bateau, Aigle, Lacoste, Armor Lux, Kaporal, Oxbow, Le Coq Sportif, Le Slip
 
 - **Python 3.9+**
 - **requests** — HTTP client
-- **BeautifulSoup4** — parsing HTML
-- **pandas** — manipulation données
-- **openpyxl** — export Excel formaté
+- **BeautifulSoup4 + lxml** — parsing HTML
+- **pandas** — manipulation données + export CSV
+- **openpyxl** — export Excel
 - **gspread** — Google Sheets API
-- **SerpAPI** — recherche Google fiable (optionnel)
-- **launchd / cron** — scheduling quotidien
+- **Docker** — conteneurisation (session 2)
+- **cron / launchd** — scheduling
+
+---
+
+## Pipeline Amazon vs Zalando — Détail
+
+### Objectif business
+
+Identifier les marques FR de vêtements sur **Amazon.fr** mais **absentes de Zalando.fr** → leads pour Mirakl.
+
+### Résultats POC
+
+| Marque | Amazon | Zalando | Statut |
+|--------|--------|---------|--------|
+| Geographical Norway | Boutique officielle | Absent | **LEAD** |
+| Naf Naf | 1000+ résultats | Seconde main | **LEAD** |
+| Celio | Jeans, basiques | Seconde main | **LEAD** |
+| Chevignon | Blousons cuir | Seconde main | **LEAD** |
+| Eric Bompard | Cachemire | Absent | **LEAD** |
+
+### Usage
+
+```bash
+python3 pipeline/run_batch.py            # Batch 10 marques
+python3 pipeline/run_batch.py --all      # Toutes les marques
+python3 pipeline/run_batch.py --reset    # Reset la queue
+python3 pipeline/export_excel.py         # Export Excel
+python3 pipeline/setup_gsheet.py        # Setup Google Sheets
+```
+
+### Config (optionnel)
+
+```bash
+cp pipeline/.env.example pipeline/.env
+# SERPAPI_KEY=...     (recherche Google fiable)
+# SLACK_WEBHOOK_URL=  (notifications)
+```

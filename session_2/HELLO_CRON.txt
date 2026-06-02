@@ -1,0 +1,4 @@
+chmod +x "/Users/Anas/Documents/cours-scraping-pipeline/session_2/hello_cron.sh"
+# macOS : voir LAUNCHD.txt (recommandé)
+# Linux : crontab -e puis ligne * * * * * /bin/bash .../hello_cron.sh
+cat "/Users/Anas/Documents/cours-scraping-pipeline/session_2/logs/hello_cron.log"

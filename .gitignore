@@ -4,20 +4,18 @@ google_creds.json
 pipeline/.env
 
 # Data files (générés par le pipeline)
-data/
-*.xlsx
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/*.csv
+data/*.xlsx
+data/*.png
 
 # Logs
+logs/*
+!logs/.gitkeep
 pipeline/logs/
-*.log
-
-# Cours / autres sessions (pas lié au pipeline)
-session_2/
-src/
-scripts/
-logs/
-run.py
-/requirements.txt
 
 # Python
 __pycache__/

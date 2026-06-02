@@ -1,0 +1,22 @@
+# macOS — lancement automatique tous les jours à 15h30 (heure locale)
+#
+# 1) Webhook Slack : copier .env.example → .env et renseigner SLACK_WEBHOOK_URL
+#
+# 2) Une fois :
+#    chmod +x "/Users/Anas/Documents/cours-scraping-pipeline/session_2/crontab.sh"
+#
+# 3) Installer le Launch Agent :
+#    cp "/Users/Anas/Documents/cours-scraping-pipeline/session_2/launchd/com.cours.session2.docker.plist" ~/Library/LaunchAgents/
+#    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.cours.session2.docker.plist
+#
+# 4) Docker Desktop doit être ouvert sur le Mac avant 15h30.
+#
+# Arrêter le job :
+#    launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/com.cours.session2.docker.plist
+#
+# Test manuel (sans attendre 15h30) :
+#    /Users/Anas/Documents/cours-scraping-pipeline/session_2/crontab.sh
+#
+# Logs : session_2/logs/cron_session2.log
+#
+# (Hello « Bonjour Thierry » : launchd/com.cours.session2.hello.plist — optionnel.)

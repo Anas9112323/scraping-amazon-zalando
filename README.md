@@ -58,14 +58,11 @@ pipeline/
 ## Installation
 
 ```bash
-# Cloner le repo
-git clone https://github.com/<username>/cours-scraping-pipeline.git
-cd cours-scraping-pipeline
+git clone https://github.com/Anas9112323/scraping-amazon-zalando.git
+cd scraping-amazon-zalando
 
-# Installer les dépendances
 pip install -r pipeline/requirements.txt
 
-# Configurer l'environnement
 cp pipeline/.env.example pipeline/.env
 # Éditer pipeline/.env avec ta clé SerpAPI (optionnel mais recommandé)
 ```
@@ -108,13 +105,12 @@ python3 pipeline/setup_gsheet.py
 
 ## Cron job — Exécution quotidienne à 8h
 
-### macOS (launchd) — recommandé
+### macOS (launchd)
 
 ```bash
-# Charger le job
 launchctl load ~/Library/LaunchAgents/com.scraping.pipeline.plist
 
-# Vérifier qu'il est actif
+# Vérifier
 launchctl list | grep scraping
 
 # Désactiver
@@ -129,17 +125,18 @@ crontab -e
 0 8 * * * /chemin/vers/pipeline/cron_pipeline.sh
 ```
 
+> **Note :** Adapter les paths dans `cron_pipeline.sh` et le fichier `.plist` à votre machine.
+
 ---
 
 ## Configuration
 
-### SerpAPI (recommandé pour la fiabilité)
+### SerpAPI (recommandé)
 
-Sans SerpAPI, le pipeline fonctionne en mode dégradé (Amazon OK, Zalando souvent bloqué 403).
+Sans SerpAPI, le pipeline fonctionne en mode dégradé (Amazon partiellement OK, Zalando souvent bloqué 403).
 
 1. Crée un compte gratuit sur [serpapi.com](https://serpapi.com/) (100 recherches/mois)
-2. Copie ta clé API
-3. Ajoute dans `pipeline/.env` :
+2. Ajoute dans `pipeline/.env` :
 
 ```
 SERPAPI_KEY=ta_cle_api_ici
@@ -147,31 +144,27 @@ SERPAPI_KEY=ta_cle_api_ici
 
 ### Google Sheets (partage automatique)
 
-Pour que le cron job mette à jour un Google Sheet partagé automatiquement :
-
 1. Va sur [Google Cloud Console](https://console.cloud.google.com/)
 2. Crée un projet → active **Google Sheets API** + **Google Drive API**
 3. Crée un **Service Account** → télécharge la clé JSON
 4. Place le fichier dans `pipeline/google_creds.json`
 5. Lance `python3 pipeline/setup_gsheet.py`
 
-Le script crée le spreadsheet, injecte les données, et génère un lien partageable.
-
 ---
 
-## Résultats actuels (POC)
+## Résultats du POC
 
 ### 5 LEADS identifiés
 
 | Marque | Amazon | Zalando | Statut |
 |--------|--------|---------|--------|
-| Geographical Norway | Oui — boutique officielle | Absent | **LEAD** |
-| Naf Naf | Oui — robes, manteaux | Seconde main uniquement | **LEAD** |
-| Celio | Oui — jeans, basiques | Seconde main uniquement | **LEAD** |
-| Chevignon | Oui — blousons cuir | Seconde main uniquement | **LEAD** |
-| Eric Bompard | Oui — cachemire | Absent | **LEAD** |
+| Geographical Norway | Boutique officielle, 1K+ clients | Absent | **LEAD** |
+| Naf Naf | Robes, manteaux, 1000+ résultats | Seconde main uniquement | **LEAD** |
+| Celio | Jeans, basiques | Seconde main uniquement | **LEAD** |
+| Chevignon | Blousons cuir, 111+ résultats | Seconde main uniquement | **LEAD** |
+| Eric Bompard | Écharpes cachemire | Absent | **LEAD** |
 
-### 10 marques déjà sur les 2 plateformes (référence)
+### 10 marques déjà sur les 2 plateformes
 
 Petit Bateau, Aigle, Lacoste, Armor Lux, Kaporal, Oxbow, Le Coq Sportif, Le Slip Français, Veja, Aubade
 
@@ -206,10 +199,4 @@ Petit Bateau, Aigle, Lacoste, Armor Lux, Kaporal, Oxbow, Le Coq Sportif, Le Slip
 - **openpyxl** — export Excel formaté
 - **gspread** — Google Sheets API
 - **SerpAPI** — recherche Google fiable (optionnel)
-- **launchd/cron** — scheduling quotidien
-
----
-
-## Auteurs
-
-Projet réalisé dans le cadre d'un cours de scraping.
+- **launchd / cron** — scheduling quotidien

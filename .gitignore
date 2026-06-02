@@ -1,14 +1,11 @@
 # Credentials & secrets
 google_creds.json
-*.json.bak
 .env
 pipeline/.env
 
 # Data files (générés par le pipeline)
 data/
-*.csv
 *.xlsx
-*.png
 
 # Logs
 pipeline/logs/
@@ -29,11 +26,9 @@ __pycache__/
 .venv/
 venv/
 *.egg-info/
+.Python
+.pytest_cache/
+.mypy_cache/
 
 # macOS
 .DS_Store
-
-# IDE
-.vscode/
-.idea/
-*.swp

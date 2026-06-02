@@ -12,7 +12,6 @@ import os
 import re
 import time
 import random
-import json
 from typing import Optional
 from urllib.parse import quote_plus
 
@@ -98,10 +97,22 @@ def check_amazon(brand_name: str, mot_cle: str) -> dict:
                     except ValueError:
                         pass
                 rating_info = hit.get("rich_snippet", {}).get("top", {})
-                if "rating" in str(rating_info):
-                    m = re.search(r"([\d,\.]+)", str(rating_info.get("detected_extensions", {}).get("rating", "")))
-                    if m:
-                        ratings.append(float(m.group(1).replace(",", ".")))
+                detected = rating_info.get("detected_extensions", {}) if isinstance(rating_info, dict) else {}
+                if detected.get("rating"):
+                    try:
+                        ratings.append(float(str(detected["rating"]).replace(",", ".")))
+                    except (ValueError, TypeError):
+                        pass
+                if detected.get("reviews"):
+                    try:
+                        reviews.append(int(str(detected["reviews"]).replace(",", "").replace(" ", "")))
+                    except (ValueError, TypeError):
+                        pass
+                for m in re.finditer(r"(\d[\d\s\u202f]*)\s*(?:évaluation|avis|note|commentaire)", text):
+                    try:
+                        reviews.append(int(m.group(1).replace(" ", "").replace("\u202f", "")))
+                    except ValueError:
+                        pass
 
             if ratings:
                 result["amazon_note"] = f"{sum(ratings)/len(ratings):.1f}"

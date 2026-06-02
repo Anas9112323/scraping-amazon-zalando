@@ -1,9 +1,12 @@
-# Credentials & secrets
-google_creds.json
-.env
-pipeline/.env
+# Pipeline Amazon/Zalando (repo séparé)
+pipeline/
+scripts/
 
-# Data files (générés par le pipeline)
+# Credentials & secrets
+.env
+google_creds.json
+
+# Data files (générés)
 data/raw/*
 !data/raw/.gitkeep
 data/processed/*
@@ -15,7 +18,6 @@ data/*.png
 # Logs
 logs/*
 !logs/.gitkeep
-pipeline/logs/
 
 # Python
 __pycache__/
